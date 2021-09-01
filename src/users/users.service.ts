@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { RegistDto } from "../dtos";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserDocument } from "../schemas/user.schema";
+import { ForbiddenException } from "../exceptions/forbidden.exception";
 
 export type User = any;
 
@@ -17,7 +18,16 @@ export class UsersService {
   }
 
   async createUser(registDto: RegistDto) {
-    const createUser = new this.userModel(registDto);
-    return createUser.save();
+    try {
+      const createUser = new this.userModel(registDto);
+      await createUser.save();
+      return createUser;
+    } catch (e) {
+      if (e.code === 11000) {
+        throw new ForbiddenException('Invalid Account ID');
+      } else {
+        throw new ForbiddenException('Service Error');
+      }
+    }
   }
 }
