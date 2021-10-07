@@ -10,6 +10,18 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    links:
+      - mongo
+    command: >
+      /bin/sh -c '
+      while ! nc -z mongo 27017;
+      do
+        echo "waiting for database ...";
+        sleep 3;
+      done;
+      echo "db is ready!";
+      npm start;
+      '
 #    env_file: .env
 #    environment:
 #      - MONGO_USERNAME=$MONGO_USERNAME
