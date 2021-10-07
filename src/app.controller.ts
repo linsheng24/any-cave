@@ -12,7 +12,7 @@ export class AppController {
   @ApiTags('auth')
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
-  async login(@Request() req) {
+  async login(@Request() req, @Body() loginDto: LoginDto) {
     return this.authService.login(req.user);
   }
 
