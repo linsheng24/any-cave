@@ -4,9 +4,11 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import { TimeoutInterceptor } from "./interceptors/timeout.interceptor";
 import { TransformInterceptor } from "./interceptors/transform.interceptor";
+import { RedisIoAdapter } from "./adapters/redis-io-adapter";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
+  app.useWebSocketAdapter(new RedisIoAdapter(app));
   app.useGlobalInterceptors(new TimeoutInterceptor());
   app.useGlobalInterceptors(new TransformInterceptor());
   const config = new DocumentBuilder()

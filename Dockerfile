@@ -1,8 +1,8 @@
 FROM node:14-alpine
 
-WORKDIR /workspace
+WORKDIR /usr/src/app
 
-COPY package.json yarn.lock /workspace/
+COPY package.json ./
 
 RUN yarn
 

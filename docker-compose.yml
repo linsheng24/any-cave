@@ -12,6 +12,7 @@ services:
       - "3000:3000"
     links:
       - mongo
+      - redis
     command: >
       /bin/sh -c '
       while ! nc -z mongo 27017;
@@ -20,7 +21,7 @@ services:
         sleep 3;
       done;
       echo "db is ready!";
-      npm start;
+      yarn start:dev;
       '
 #    env_file: .env
 #    environment:
@@ -29,9 +30,9 @@ services:
 #      - MONGO_HOSTNAME=db
 #      - MONGO_PORT=$MONGO_PORT
 #      - MONGO_DB=$MONGO_DB
-#    volumes:
-#      - .:/home/node/app
-#      - node_modules:/home/node/app/node_modules
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 #    networks:
 #      - app-network
 #    command: ./wait-for.sh db:27017 -- /home/node/app/node_modules/.bin/nodemon app.js
@@ -42,3 +43,10 @@ services:
       - 27017:27017
     volumes:
       - ./tmp/data/db:/data/db
+  redis:
+    image: redis:6
+    restart: "no"
+    container_name: redis
+    ports:
+      - "6379:6379"
+
