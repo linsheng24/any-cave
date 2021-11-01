@@ -20,3 +20,10 @@ export class RegistDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class CreateCaveDto {
+  @ApiProperty()
+  name: string;
+}
+
+

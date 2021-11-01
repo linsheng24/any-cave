@@ -1,13 +1,16 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from "@nestjs/common";
-import { AppService } from './app.service';
+import { Body, Controller, Post, Request, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "./auth/auth.service";
 import { LoginDto, RegistDto } from "./dtos";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { UsersService } from "./users/users.service";
 
 @Controller()
 export class AppController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService
+  ) {}
 
   @ApiTags('auth')
   @UseGuards(AuthGuard('local'))
@@ -27,6 +30,7 @@ export class AppController {
   @UseGuards(AuthGuard('jwt'))
   @Post('auth/profile')
   async profile(@Request() req) {
-    return req.user;
+    const { userId } = req.user;
+    return await this.usersService.getProfile(userId);
   }
 }
