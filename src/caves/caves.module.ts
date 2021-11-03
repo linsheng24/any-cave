@@ -5,10 +5,10 @@ import { Cave, CaveSchema } from "../schemas/cave.schema";
 import { CavesService } from './caves.service';
 
 @Module({
-
   imports: [
     MongooseModule.forFeature([
-      { name: Cave.name, schema: CaveSchema }
+      { name: Cave.name, schema: CaveSchema },
+      { name: User.name, schema: UserSchema }
     ])
   ],
   providers: [CavesService],

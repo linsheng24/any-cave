@@ -12,10 +12,15 @@ export class CavesController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Post('create')
-  async create(@Request() req, @Body() caveData) {
+  async create(@Request() req, @Body() caveData: CreateCaveDto) {
     const ownerId = req.user.userId;
     const createCave = await this.cavesService.create({ ...caveData, ownerId });
-    console.log(createCave);
-    return 111;
+    if (createCave) {
+      const caveId = createCave._id;
+      await this.cavesService.join(caveId, ownerId);
+      return { success: true };
+    } else {
+      return { success: false };
+    }
   }
 }

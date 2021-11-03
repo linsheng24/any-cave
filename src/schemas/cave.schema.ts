@@ -9,7 +9,14 @@ export class Cave extends Document {
   name: string;
 
   @Prop({ required: true })
-  ownerId: string;
+
+  @Prop({ required: true, default: [] })
+  rooms: [{
+    name: string,
+    roomId: string,
+    channelId: string,
+    enable: boolean
+  }];
 
   @Prop({ required: true, default: true })
   enable: boolean;
