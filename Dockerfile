@@ -1,4 +1,6 @@
-FROM node:14-alpine
+FROM node:17.3
+
+RUN apt-get update && apt-get install -y netcat
 
 WORKDIR /usr/src/app
 
